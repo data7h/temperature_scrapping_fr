@@ -5,7 +5,7 @@ FROM python:3.6-slim
 LABEL maintainer = "hslimi@outlook.com"
 # Set the default working directory
 WORKDIR /app/
-COPY API_OpenWeatherMap-hs.py requirements.txt /app/
+COPY API_OpenWeatherMap-hs.py requirements.txt city.list.json /app/
 RUN pip install -r requirements.txt
 CMD ["python","API_OpenWeatherMap-hs.py"]
 # When the container starts, run this

@@ -6,12 +6,6 @@
 # 
 
 # In[1]:
-
-
-#Image(url= "weather.png")
-
-
-
 # 
 # 
 # Dans cet atelier, nous exploitions cette api afin d’extraire les données météorologique sous forme JSON et on le stocke dans un fichier CSV respectant un format bien défini.
@@ -39,8 +33,8 @@
 # In[2]:
 
 
-from IPython.display import Image
-from IPython.core.display import HTML
+
+#from IPython.core.display import HTML
 import os
 import csv
 from termcolor import colored, cprint
@@ -50,8 +44,9 @@ import urllib.request
 import pandas as pd
 
 
-currentpath= os.getcwd()
-print (currentpath)
+currentpath = os.getcwd()
+#print (currentpath)
+#currentpath = "/home/houcine/Bureau/fitec scripts/scrapping/projet_scraptemp_fr"
 
 # #### Configuration de API et genration de url d'accès à l'API
 # Définition d'un fonction qui prend en parametres id de la ville, la ville, le pays pour generer un url respectant l'appel de l'<b>API OpenWeatherMAP</b> et aussi configurer l'APPID recuperé après enregistrement sur le site.
@@ -68,7 +63,7 @@ print (currentpath)
 
 
 def url_builder(city_id,city_name,country):
-    user_api = 'f7fb3bf4b2fce32d72e921e197ac64e5'  # Obtain yours form: http://openweathermap.org/
+    user_api = 'd9067ba9e58fe1de8e563c70801a2595'  # Obtain yours form: http://openweathermap.org/
     unit = 'metric'  # For Fahrenheit use imperial, for Celsius use metric, and the default is Kelvin.
     if(city_name!=""):
         api = 'http://api.openweathermap.org/data/2.5/weather?q=' # "http://api.openweathermap.org/data/2.5/weather?q=Tunis,fr
@@ -181,11 +176,22 @@ def WriteCSV(data):
 
 # In[8]:
 
+from pandas.io.json import json_normalize #package for flattening json in pandas df
 
+#load json object
+
+#def getVilles():
+#    with open('city.list.json') as f:
+#        d      = json.load(f)
+#        villes = pd.DataFrame(d)
+#        return villes
+    
+#villes=getVilles()
+#villes
 villes = pd.read_json(currentpath + "/city.list.json")
-villes_france = villes[villes['country'] == 'FR' ]
-ids_france       = list(villes_france ['id'])
-countries_france = list(villes_france ['country'])
+villes_france = villes[villes["country"] == "FR"]
+ids_france       = list(villes_france["id"])
+countries_france = list(villes_france["country"])
 villes_france.tail(5)
 
 
@@ -194,7 +200,7 @@ villes_france.tail(5)
 
 if __name__ == '__main__':
     try:
-        for i in range(7):
+        for i in range(len(countries_france)):
             #country   = 'France'
             #city_name =  countries_france[i]
             city_id    =  ids_france[i]
@@ -209,11 +215,11 @@ if __name__ == '__main__':
             #Enregistrement des données à dans un fichier CSV 
             WriteCSV(data_orgnized)
             
-        dftest = pd.read_csv(currentpath + "weatherOpenMap.csv",
+        dftest = pd.read_csv(currentpath + "/weatherOpenMap.csv",
                      usecols    = [0,2], 
                      names      = ['Ville','Temperature'],  
                      index_col  = None)
-        dftest.to_csv(currentpath + "/weatherOpenMap.csv",index = False) 
+        dftest.to_csv("weatherOpenMap.csv",index = False) 
         print(dftest)
     except IOError:
         print('no internet')
