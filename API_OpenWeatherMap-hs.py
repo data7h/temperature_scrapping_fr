@@ -63,7 +63,7 @@ currentpath = os.getcwd()
 
 
 def url_builder(city_id,city_name,country):
-    user_api = 'd9067ba9e58fe1de8e563c70801a2595'  # Obtain yours form: http://openweathermap.org/
+    user_api = '8964060168ab25bde10135f0eadc5218'  # Obtain yours form: http://openweathermap.org/
     unit = 'metric'  # For Fahrenheit use imperial, for Celsius use metric, and the default is Kelvin.
     if(city_name!=""):
         api = 'http://api.openweathermap.org/data/2.5/weather?q=' # "http://api.openweathermap.org/data/2.5/weather?q=Tunis,fr
@@ -201,6 +201,11 @@ villes_france.tail(5)
 if __name__ == '__main__':
     try:
         for i in range(len(countries_france)):
+            #start = datetime.now()
+            import time 
+            if i in [j for j in range(60,len(countries_france)-1,60)]:  #duration = datetime.now()- start
+                print(i, ": 1 min delay")
+                time.sleep(60)
             #country   = 'France'
             #city_name =  countries_france[i]
             city_id    =  ids_france[i]
@@ -214,14 +219,12 @@ if __name__ == '__main__':
             data_orgnized=data_organizer(data)
             #Enregistrement des données à dans un fichier CSV 
             WriteCSV(data_orgnized)
-            
-        dftest = pd.read_csv(currentpath + "/weatherOpenMap.csv",
+        df = pd.read_csv("weatherOpenMap.csv",
                      usecols    = [0,2], 
                      names      = ['Ville','Temperature'],  
                      index_col  = None)
-        dftest.to_csv("weatherOpenMap.csv",index = False) 
-        print(dftest)
+        df.to_csv("weatherOpenMap.csv",index = False) 
+        print(df)
     except IOError:
         print('no internet')
- 
-
+    
