@@ -202,10 +202,10 @@ if __name__ == '__main__':
     try:
         for i in range(len(countries_france)):
             #start = datetime.now()
-            import time 
-            if i in [j for j in range(60,len(countries_france)-1,60)]:  #duration = datetime.now()- start
-                print(i, ": 1 min delay")
-                time.sleep(60)
+            #import time 
+            #if i in [j for j in range(60,len(countries_france)-1,60)]:  #duration = datetime.now()- start
+            #    print(i, ": 60 seconds delay")
+            #    time.sleep(60)
             #country   = 'France'
             #city_name =  countries_france[i]
             city_id    =  ids_france[i]
@@ -219,12 +219,14 @@ if __name__ == '__main__':
             data_orgnized=data_organizer(data)
             #Enregistrement des données à dans un fichier CSV 
             WriteCSV(data_orgnized)
-        df = pd.read_csv("weatherOpenMap.csv",
+        print("Les temperatures de toutes les villes sont scrappees :D")
+    except IOError:
+        print('no internet')
+        print("Seullement " + str(i) + " villes ont pu étre scrapper")
+
+df = pd.read_csv("weatherOpenMap.csv",
                      usecols    = [0,2], 
                      names      = ['Ville','Temperature'],  
                      index_col  = None)
-        df.to_csv("weatherOpenMap.csv",index = False) 
-        print(df)
-    except IOError:
-        print('no internet')
-    
+df.to_csv("weatherOpenMap.csv",index = False) 
+df 
